@@ -3,7 +3,11 @@ gcloud config set compute/zone us-central1-a
 gsutil -m cp -r gs://spls/gsp053/orchestrate-with-kubernetes .
 cd orchestrate-with-kubernetes/kubernetes
 
-gcloud container clusters create bootcamp --num-nodes 5 --scopes "https://www.googleapis.com/auth/projecthosting,storage-rw"
+gcloud container clusters create bootcamp \
+    --num-nodes 2 \
+    --scopes "https://www.googleapis.com/auth/projecthosting,storage-rw" \
+    --disk-size 20 \
+    --disk-type pd-ssd
 
 
 rm deployments/auth.yaml
@@ -51,6 +55,8 @@ spec:
             initialDelaySeconds: 5
             timeoutSeconds: 1
 EOF
+
+echo "DEPLOYMENT"
 
 kubectl create -f deployments/auth.yaml
 kubectl create -f services/auth.yaml
